@@ -69,13 +69,13 @@ p{
   box-shadow:0 10px 20px rgba(255,93,143,0.5);
 }
 
-/* ❌ NO BUTTON — SIZE LOCKED */
+/* NO BUTTON */
 #noBtn{
   position:absolute;
   right:10px;
   top:60px;
-  width:140px;        /* 🔒 FIXED */
-  height:50px;        /* 🔒 FIXED */
+  width:140px;
+  height:50px;
   font-size:1rem;
   background:#c77dff;
   color:white;
@@ -85,7 +85,6 @@ p{
   transition:left 0.1s linear, top 0.1s linear, right 0.1s linear, bottom 0.1s linear;
 }
 
-/* NO hover safety */
 #noBtn:hover{
   width:140px;
   height:50px;
@@ -115,6 +114,28 @@ p{
 @keyframes fall{
   to{transform:translateY(110vh);}
 }
+
+/* 📱 MOBILE OPTIMIZATION */
+@media (max-width: 600px) {
+  .container{
+    width:95%;
+    max-width:95%;
+    padding:45px 25px;
+    border-radius:30px;
+  }
+
+  h1{
+    font-size:2.3rem;
+  }
+
+  p{
+    font-size:1.3rem;
+  }
+
+  .buttons{
+    height:190px;
+  }
+}
 </style>
 </head>
 
@@ -141,7 +162,6 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const msg = document.getElementById("msg");
 
-/* CORNERS */
 const corners = [
   { left:"10px", top:"10px" },
   { right:"10px", top:"10px" },
@@ -166,7 +186,7 @@ function moveNo(){
   Object.assign(noBtn.style, corners[i]);
 }
 
-/* DESKTOP */
+/* Desktop */
 box.addEventListener("mousemove",(e)=>{
   const r=noBtn.getBoundingClientRect();
   const cx=r.left+r.width/2;
@@ -176,7 +196,7 @@ box.addEventListener("mousemove",(e)=>{
   }
 });
 
-/* MOBILE */
+/* Mobile */
 box.addEventListener("touchmove",(e)=>{
   const t=e.touches[0];
   const r=noBtn.getBoundingClientRect();
