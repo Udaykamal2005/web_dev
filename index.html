@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Will You Be My Valentine 💜</title>
 
 <style>
@@ -13,7 +14,7 @@
 }
 
 body{
-  height:100vh;
+  min-height:100vh;
   background:linear-gradient(135deg,#e6ccff,#ffccdd);
   display:flex;
   justify-content:center;
@@ -23,41 +24,43 @@ body{
 
 .container{
   background:rgba(255,255,255,0.25);
-  padding:40px;
+  padding:30px;
   border-radius:25px;
   text-align:center;
   backdrop-filter:blur(10px);
   box-shadow:0 20px 40px rgba(0,0,0,0.2);
+  width:90%;
+  max-width:420px;
 }
 
 h1{
   color:#7b2cbf;
-  font-size:2.5rem;
-  margin-bottom:15px;
+  font-size:2rem;
+  margin-bottom:12px;
 }
 
 p{
   color:#5a189a;
-  font-size:1.2rem;
-  margin-bottom:30px;
+  font-size:1.1rem;
+  margin-bottom:25px;
 }
 
 /* BUTTON BOX */
 .buttons{
   position:relative;
-  width:360px;
+  width:100%;
   height:160px;
   margin:auto;
-  border-radius:20px;
 }
 
 /* YES BUTTON */
 #yesBtn{
   position:absolute;
-  left:20px;
+  left:10px;
   top:60px;
-  padding:15px 35px;
-  font-size:1.1rem;
+  width:140px;
+  height:50px;
+  font-size:1rem;
   background:#ff5d8f;
   color:white;
   border:none;
@@ -66,42 +69,46 @@ p{
   box-shadow:0 10px 20px rgba(255,93,143,0.5);
 }
 
-/* NO BUTTON (SMALL & LOCKED SIZE) */
+/* ❌ NO BUTTON — SIZE LOCKED */
 #noBtn{
   position:absolute;
-  padding:6px 14px;
-  font-size:0.75rem;
+  right:10px;
+  top:60px;
+  width:140px;        /* 🔒 FIXED */
+  height:50px;        /* 🔒 FIXED */
+  font-size:1rem;
   background:#c77dff;
   color:white;
   border:none;
-  border-radius:20px;
+  border-radius:30px;
   cursor:pointer;
-  transition:all 0.1s linear;
-  transform:scale(1);     /* 🔒 size locked */
+  transition:left 0.1s linear, top 0.1s linear, right 0.1s linear, bottom 0.1s linear;
 }
 
+/* NO hover safety */
 #noBtn:hover{
-  transform:scale(1);     /* 🔒 no growth on hover */
+  width:140px;
+  height:50px;
 }
 
 .message{
   display:none;
-  margin-top:30px;
-  font-size:1.8rem;
+  margin-top:25px;
+  font-size:1.6rem;
   color:#ff006e;
   animation:pop 0.6s ease forwards;
 }
 
 @keyframes pop{
-  from{transform:scale(0);}
-  to{transform:scale(1);}
+  from{opacity:0;}
+  to{opacity:1;}
 }
 
 /* Emoji rain */
 .emoji{
   position:absolute;
   top:-40px;
-  font-size:24px;
+  font-size:22px;
   animation:fall linear infinite;
 }
 
@@ -124,7 +131,7 @@ p{
 
   <div class="message" id="msg">
     YAYYYY 💍💞<br>
-    Happy Valentine’s Day  CHITTI😘💐
+    Happy Valentine’s Day CHITTI 😘💐
   </div>
 </div>
 
@@ -134,12 +141,12 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const msg = document.getElementById("msg");
 
-/* CORNERS INSIDE THE BOX */
+/* CORNERS */
 const corners = [
-  { left: "10px", top: "10px" },
-  { right: "10px", top: "10px" },
-  { left: "10px", bottom: "10px" },
-  { right: "10px", bottom: "10px" }
+  { left:"10px", top:"10px" },
+  { right:"10px", top:"10px" },
+  { left:"10px", bottom:"10px" },
+  { right:"10px", bottom:"10px" }
 ];
 
 let lastCorner = -1;
@@ -147,54 +154,54 @@ let lastCorner = -1;
 function moveNo(){
   let i;
   do{
-    i = Math.floor(Math.random() * corners.length);
-  } while(i === lastCorner);
-
+    i = Math.floor(Math.random()*corners.length);
+  }while(i === lastCorner);
   lastCorner = i;
 
-  // reset positions
-  noBtn.style.left = "";
-  noBtn.style.right = "";
-  noBtn.style.top = "";
-  noBtn.style.bottom = "";
-  noBtn.style.transform = "scale(1)"; // 🔒 always reset size
+  noBtn.style.left="";
+  noBtn.style.right="";
+  noBtn.style.top="";
+  noBtn.style.bottom="";
 
   Object.assign(noBtn.style, corners[i]);
 }
 
-/* Escape BEFORE cursor touches */
-box.addEventListener("mousemove", (e)=>{
-  const r = noBtn.getBoundingClientRect();
-  const cx = r.left + r.width/2;
-  const cy = r.top + r.height/2;
-
-  const dx = e.clientX - cx;
-  const dy = e.clientY - cy;
-  const dist = Math.sqrt(dx*dx + dy*dy);
-
-  if(dist < 70){
+/* DESKTOP */
+box.addEventListener("mousemove",(e)=>{
+  const r=noBtn.getBoundingClientRect();
+  const cx=r.left+r.width/2;
+  const cy=r.top+r.height/2;
+  if(Math.hypot(e.clientX-cx,e.clientY-cy)<70){
     moveNo();
   }
 });
 
-yesBtn.addEventListener("click", ()=>{
+/* MOBILE */
+box.addEventListener("touchmove",(e)=>{
+  const t=e.touches[0];
+  const r=noBtn.getBoundingClientRect();
+  const cx=r.left+r.width/2;
+  const cy=r.top+r.height/2;
+  if(Math.hypot(t.clientX-cx,t.clientY-cy)<70){
+    moveNo();
+  }
+});
+
+yesBtn.addEventListener("click",()=>{
   msg.style.display="block";
 });
 
 /* Emoji rain */
 const emojis=["💖","💘","💝","💕","🌸","💜","😍"];
-
-function createEmoji(){
+setInterval(()=>{
   const e=document.createElement("div");
-  e.classList.add("emoji");
+  e.className="emoji";
   e.innerText=emojis[Math.floor(Math.random()*emojis.length)];
   e.style.left=Math.random()*window.innerWidth+"px";
   e.style.animationDuration=(3+Math.random()*2)+"s";
   document.body.appendChild(e);
   setTimeout(()=>e.remove(),5000);
-}
-
-setInterval(createEmoji,200);
+},220);
 </script>
 
 </body>
