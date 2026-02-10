@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Will You Be My Valentine 💜</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  height:100vh;
+  background:linear-gradient(135deg,#e6ccff,#ffccdd);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+
+.container{
+  background:rgba(255,255,255,0.25);
+  padding:40px;
+  border-radius:25px;
+  text-align:center;
+  backdrop-filter:blur(10px);
+  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+}
+
+h1{
+  color:#7b2cbf;
+  font-size:2.5rem;
+  margin-bottom:15px;
+}
+
+p{
+  color:#5a189a;
+  font-size:1.2rem;
+  margin-bottom:30px;
+}
+
+/* BUTTON BOX */
+.buttons{
+  position:relative;
+  width:360px;
+  height:160px;
+  margin:auto;
+  border-radius:20px;
+}
+
+/* YES BUTTON */
+#yesBtn{
+  position:absolute;
+  left:20px;
+  top:60px;
+  padding:15px 35px;
+  font-size:1.1rem;
+  background:#ff5d8f;
+  color:white;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  box-shadow:0 10px 20px rgba(255,93,143,0.5);
+}
+
+/* NO BUTTON (SMALL & LOCKED SIZE) */
+#noBtn{
+  position:absolute;
+  padding:6px 14px;
+  font-size:0.75rem;
+  background:#c77dff;
+  color:white;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  transition:all 0.1s linear;
+  transform:scale(1);     /* 🔒 size locked */
+}
+
+#noBtn:hover{
+  transform:scale(1);     /* 🔒 no growth on hover */
+}
+
+.message{
+  display:none;
+  margin-top:30px;
+  font-size:1.8rem;
+  color:#ff006e;
+  animation:pop 0.6s ease forwards;
+}
+
+@keyframes pop{
+  from{transform:scale(0);}
+  to{transform:scale(1);}
+}
+
+/* Emoji rain */
+.emoji{
+  position:absolute;
+  top:-40px;
+  font-size:24px;
+  animation:fall linear infinite;
+}
+
+@keyframes fall{
+  to{transform:translateY(110vh);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Hey My Love 💜</h1>
+  <p>Will you be my Valentine? 💕</p>
+
+  <div class="buttons" id="box">
+    <button id="yesBtn">YES 💖</button>
+    <button id="noBtn">NO</button>
+  </div>
+
+  <div class="message" id="msg">
+    YAYYYY 💍💞<br>
+    Happy Valentine’s Day  CHITTI😘💐
+  </div>
+</div>
+
+<script>
+const box = document.getElementById("box");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const msg = document.getElementById("msg");
+
+/* CORNERS INSIDE THE BOX */
+const corners = [
+  { left: "10px", top: "10px" },
+  { right: "10px", top: "10px" },
+  { left: "10px", bottom: "10px" },
+  { right: "10px", bottom: "10px" }
+];
+
+let lastCorner = -1;
+
+function moveNo(){
+  let i;
+  do{
+    i = Math.floor(Math.random() * corners.length);
+  } while(i === lastCorner);
+
+  lastCorner = i;
+
+  // reset positions
+  noBtn.style.left = "";
+  noBtn.style.right = "";
+  noBtn.style.top = "";
+  noBtn.style.bottom = "";
+  noBtn.style.transform = "scale(1)"; // 🔒 always reset size
+
+  Object.assign(noBtn.style, corners[i]);
+}
+
+/* Escape BEFORE cursor touches */
+box.addEventListener("mousemove", (e)=>{
+  const r = noBtn.getBoundingClientRect();
+  const cx = r.left + r.width/2;
+  const cy = r.top + r.height/2;
+
+  const dx = e.clientX - cx;
+  const dy = e.clientY - cy;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+
+  if(dist < 70){
+    moveNo();
+  }
+});
+
+yesBtn.addEventListener("click", ()=>{
+  msg.style.display="block";
+});
+
+/* Emoji rain */
+const emojis=["💖","💘","💝","💕","🌸","💜","😍"];
+
+function createEmoji(){
+  const e=document.createElement("div");
+  e.classList.add("emoji");
+  e.innerText=emojis[Math.floor(Math.random()*emojis.length)];
+  e.style.left=Math.random()*window.innerWidth+"px";
+  e.style.animationDuration=(3+Math.random()*2)+"s";
+  document.body.appendChild(e);
+  setTimeout(()=>e.remove(),5000);
+}
+
+setInterval(createEmoji,200);
+</script>
+
+</body>
+</html>
